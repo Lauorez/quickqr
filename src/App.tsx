@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
-import QRCanvas, { type EccLevel } from './components/QRCanvas'
-import Adsense from './components/Adsense'
+import QRCanvas, { type EccLevel } from './components/QRCanvas.tsx'
+import Adsense from './components/Adsense.tsx'
 
 type LogoState = {
   img: HTMLImageElement | null
