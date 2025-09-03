@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import QRCanvas, { type EccLevel } from './components/QRCanvas.tsx'
 import Adsense from './components/Adsense.tsx'
+import faviconSvg from './assets/favicon.svg'
 
 type LogoState = {
   img: HTMLImageElement | null
@@ -15,7 +16,7 @@ export default function App() {
   const [darkColor, setDarkColor] = useState('#111827')     // slate-900
   const [lightColor, setLightColor] = useState('#ffffff')   // white
   const [ecc, setEcc] = useState<EccLevel>('H')             // High, better for logos
-  const [logoRatio, setLogoRatio] = useState(0.2)
+  const [logoRatio, setLogoRatio] = useState(0.25)
   const [logoPadRatio, setLogoPadRatio] = useState(0.12)
   const [logoRounded, setLogoRounded] = useState(true)
 
@@ -54,8 +55,13 @@ export default function App() {
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-8">
       <header className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-slate-800">QR Generator (+ Logo)</h1>
-        <a className="btn" href="https://github.com/" target="_blank" rel="noreferrer">Star on GitHub</a>
+        <div className="flex items-center gap-3">
+          {/* Favicon SVG as logo */}
+          <span className="w-8 h-8 inline-block">
+            <img src={faviconSvg} alt="QuickQR Logo" className="w-8 h-8" />
+          </span>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-800">QuickQR</h1>
+        </div>
       </header>
 
       <div className="grid md:grid-cols-5 gap-6 mb-6">
@@ -199,7 +205,14 @@ export default function App() {
       </section>
 
       <footer className="text-center text-xs text-slate-500 mt-8">
-        <p>© {new Date().getFullYear()} QuickQR. Works offline once loaded.</p>
+        <nav>
+          <a href="/about.html" className="mx-2 underline">About</a>
+          <a href="/contact.html" className="mx-2 underline">Contact</a>
+          <a href="/privacy.html" className="mx-2 underline">Privacy Policy</a>
+        </nav>
+        <div className="mt-2">
+          &copy; {new Date().getFullYear()} QuickQR
+        </div>
       </footer>
     </div>
   )

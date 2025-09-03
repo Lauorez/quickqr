@@ -36,6 +36,9 @@ export default function QRCanvas({
     const canvas = canvasRef.current
     if (!canvas) return
 
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
     const content = text?.trim() || ' '
     QRCode.toCanvas(canvas, content, {
       width: size,
@@ -44,35 +47,57 @@ export default function QRCanvas({
       color: { dark: darkColor, light: lightColor }
     }, (err) => {
       if (err) return console.error(err)
-      const ctx = canvas.getContext('2d')
-      if (!ctx) return
 
-      if (logo) {
-        const W = canvas.width
-        const L = Math.max(16, Math.min(W * logoRatio, W * 0.4))
-        const pad = L * (logoPaddingRatio ?? 0.1)
+      // Draw logo if present
+      if (logo && logoRatio > 0) {
+        const L = size * logoRatio
+        const pad = L * logoPaddingRatio
+        const logoW = logo.width
+        const logoH = logo.height
+        const aspect = logoW / logoH
 
-        const x = (W - L) / 2
-        const y = (W - L) / 2
+        // The total "hole" (logo + padding) is L x L
+        // The logo itself fits inside (L - 2*pad) x (L - 2*pad), but
+        // we want the padding to expand the white area, not shrink the logo.
 
-        // Draw white rounded rect background to improve scannability
+        // Calculate logo size so logo stays the same size regardless of padding
+        let drawW = L
+        let drawH = L
+
+        if (aspect > 1) {
+          drawW = L
+          drawH = L / aspect
+        } else if (aspect < 1) {
+          drawH = L
+          drawW = L * aspect
+        }
+
+        // Center the white padding "hole"
+        const holeW = drawW + 2 * pad
+        const holeH = drawH + 2 * pad
+        const holeX = (size - holeW) / 2
+        const holeY = (size - holeH) / 2
+
+        // Center the logo inside the hole
+        const x = holeX + pad
+        const y = holeY + pad
+
         ctx.save()
         if (logoRounded) {
-          const r = Math.min(12, L * 0.2)
-          roundRect(ctx, x - pad, y - pad, L + 2*pad, L + 2*pad, r)
+          roundRect(ctx, holeX, holeY, holeW, holeH, holeH * 0.25)
           ctx.fillStyle = '#fff'
           ctx.fill()
-          ctx.strokeStyle = 'rgba(0,0,0,0.06)'
-          ctx.lineWidth = 1
-          ctx.stroke()
+          ctx.clip()
         } else {
           ctx.fillStyle = '#fff'
-          ctx.fillRect(x - pad, y - pad, L + 2*pad, L + 2*pad)
+          ctx.fillRect(holeX, holeY, holeW, holeH)
+          ctx.beginPath()
+          ctx.rect(x, y, drawW, drawH)
+          ctx.clip()
         }
-        ctx.restore()
 
-        // Draw the logo image centered
-        ctx.drawImage(logo, x, y, L, L)
+        ctx.drawImage(logo, x, y, drawW, drawH)
+        ctx.restore()
       }
 
       if (onRender) {
