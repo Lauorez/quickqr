@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+.card { @apply bg-white rounded-2xl shadow p-10; }
+.btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium border border-slate-200 hover:bg-slate-50; }
+.btn-primary { @apply bg-sky-600 text-white hover:bg-sky-700 border-none rounded-xl px-4 py-2; }
+.input { @apply w-full rounded-xl border border-slate-300 px-3 py-2 outline-none focus:ring-2 focus:ring-sky-400; }
+.label { @apply text-sm text-slate-600 mb-1; }
+.section-title { @apply text-slate-800 font-semibold; }
