@@ -47,6 +47,9 @@ jobs:
           name: production-files
           path: ./dist
 
+      - name: Write CNAME file
+        run: echo "quickqr.tech" > ./dist/CNAME
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
