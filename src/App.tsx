@@ -209,6 +209,7 @@ export default function App() {
           <a href="/about.html" className="mx-2 underline">About</a>
           <a href="/contact.html" className="mx-2 underline">Contact</a>
           <a href="/privacy.html" className="mx-2 underline">Privacy Policy</a>
+          <a href="/terms.html" className="mx-2 underline">Terms &amp; Conditions</a>
         </nav>
         <div className="mt-2">
           &copy; {new Date().getFullYear()} QuickQR
